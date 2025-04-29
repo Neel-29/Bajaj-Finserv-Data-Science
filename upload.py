@@ -6,11 +6,10 @@ import os
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# Configuration
 IMAGE_FOLDER = "D:\CODE\Python\lbmaske"
 API_URL = "http://127.0.0.1:8000/get-lab-tests"
 OUTPUT_JSON = "lab_reports_results_parallel.json"
-MAX_WORKERS = 10  # Adjust based on your CPU and network
+MAX_WORKERS = 10
 
 results = {}
 
@@ -26,13 +25,13 @@ def process_image(filename):
         data = response.json()
 
         if response.status_code == 200 and data.get('is_success'):
-            print(f"✅ {filename} processed")
+            print(f"{filename} processed")
             return (filename, data['data'])
         else:
-            print(f"⚠️ Failed {filename}: {data}")
+            print(f"Failed {filename}: {data}")
             return (filename, None)
     except Exception as e:
-        print(f"❌ Error with {filename}: {e}")
+        print(f"Error with {filename}: {e}")
         return (filename, None)
 
 
@@ -49,12 +48,12 @@ def main():
                 if result is not None:
                     results[fname] = result
             except Exception as e:
-                print(f"❌ Unexpected error on {filename}: {e}")
+                print(f"Unexpected error on {filename}: {e}")
 
     with open(OUTPUT_JSON, "w") as f:
         json.dump(results, f, indent=4)
 
-    print(f"\n🎯 Done! Results saved to {OUTPUT_JSON}")
+    print(f"\nDone! Results saved to {OUTPUT_JSON}")
 
 
 if __name__ == "__main__":
